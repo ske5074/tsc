@@ -146,23 +146,23 @@
             </div>
 
             <div class="input-group">
-                <label for="distance">Distance:</label>
-                <input type="number" id="distance" placeholder="Enter distance" value="100" min="0" step="any">
+                <label for="transport">Transport Method:</label>
+                <select id="transport"></select>
             </div>
         </div>
 
         <div class="row">
+            <div class="input-group">
+                <label for="distance">Distance:</label>
+                <input type="number" id="distance" placeholder="Enter distance" value="100" min="0" step="any">
+            </div>
+
             <div class="input-group">
                 <label for="distanceUnit">Distance Unit:</label>
                 <select id="distanceUnit">
                     <option value="1">Miles</option>
                     <option value="1.609344">Kilometers</option>
                 </select>
-            </div>
-
-            <div class="input-group">
-                <label for="transport">Transport Method:</label>
-                <select id="transport"></select>
             </div>
         </div>
 
@@ -173,8 +173,16 @@
                 <span class="result-value" id="dataAmountDisplay"></span>
             </div>
             <div class="result-item">
-                <span class="result-label">Transfer Rate:</span>
-                <span class="result-value" id="transferRate"></span>
+                <span class="result-label">Max Transfer Rate:</span>
+                <span class="result-value" id="maxTransferRate"></span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Distance Latency (RTT):</span>
+                <span class="result-value" id="latencyDisplay"></span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Effective Transfer Rate:</span>
+                <span class="result-value" id="effectiveTransferRate"></span>
             </div>
             <div class="result-item">
                 <span class="result-label">Transfer Time:</span>
@@ -268,7 +276,7 @@
             const distance = parseFloat(document.getElementById('distance').value) || 0;
             const distanceUnit = parseFloat(document.getElementById('distanceUnit').value);
             const transportData = JSON.parse(document.getElementById('transport').value);
-            const transportRate = transportData.speed; // MiB/s
+            const maxTransportRate = transportData.speed; // MiB/s (theoretical max)
             const latencyPerMile = transportData.latency; // seconds per mile
             
             if (!dataAmount || dataAmount <= 0) {
@@ -279,15 +287,49 @@
             // Update current data in mebibytes
             currentDataInMebibytes = dataAmount * dataUnit;
 
-            // Calculate transfer time in seconds (pure data transfer)
-            const dataTransferTimeSeconds = currentDataInMebibytes / transportRate;
-            
             // Calculate latency based on distance
             const distanceInMiles = distance * distanceUnit;
-            const latencySeconds = distanceInMiles * latencyPerMile;
+            const oneWayLatency = distanceInMiles * latencyPerMile;
+            const roundTripLatency = oneWayLatency * 2; // RTT for TCP acknowledgments
             
-            // Total time = data transfer + latency
-            const totalTransferTimeSeconds = dataTransferTimeSeconds + latencySeconds;
+            // Calculate effective throughput using bandwidth-delay product
+            let effectiveTransportRate = maxTransportRate;
+            
+            if (roundTripLatency > 0) {
+                // Convert MiB/s to bits/s for BDP calculation
+                const maxBandwidthBps = maxTransportRate * 1048576 * 8;
+                
+                // Use modern TCP window scaling - calculate optimal window size
+                // Optimal window = bandwidth × RTT (the bandwidth-delay product)
+                const optimalWindowBits = maxBandwidthBps * roundTripLatency;
+                
+                // Modern systems can scale TCP windows up to several MB
+                // Use a reasonable maximum of 16MB for high-speed networks
+                const maxTcpWindowBits = 16 * 1048576 * 8; // 16MB window in bits
+                
+                // Effective window is the smaller of optimal and maximum
+                const effectiveWindowBits = Math.min(optimalWindowBits, maxTcpWindowBits);
+                
+                // If RTT is very low, we're not window-limited
+                if (roundTripLatency < 0.001) { // Less than 1ms RTT
+                    effectiveTransportRate = maxTransportRate;
+                } else {
+                    // Calculate window-limited throughput
+                    const windowLimitedBps = effectiveWindowBits / roundTripLatency;
+                    
+                    // Effective throughput is minimum of window-limited and max bandwidth
+                    const effectiveBps = Math.min(windowLimitedBps, maxBandwidthBps);
+                    
+                    // Convert back to MiB/s
+                    effectiveTransportRate = effectiveBps / (1048576 * 8);
+                }
+            }
+            
+            // Calculate transfer time using effective rate
+            const dataTransferTimeSeconds = currentDataInMebibytes / effectiveTransportRate;
+            
+            // Total time = data transfer time (already includes BDP effects)
+            const totalTransferTimeSeconds = dataTransferTimeSeconds;
             
             // Get the selected option text for display
             const dataUnitSelect = document.getElementById('dataUnit');
@@ -307,7 +349,9 @@
             // Update results
             document.getElementById('summary').textContent = summaryText;
             document.getElementById('dataAmountDisplay').textContent = `${dataAmount.toLocaleString()} ${dataUnitText}`;
-            document.getElementById('transferRate').textContent = formatMiBRate(transportRate);
+            document.getElementById('maxTransferRate').textContent = formatMiBRate(maxTransportRate);
+            document.getElementById('latencyDisplay').textContent = formatTime(roundTripLatency);
+            document.getElementById('effectiveTransferRate').textContent = formatMiBRate(effectiveTransportRate);
             document.getElementById('transferTime').textContent = formatTime(totalTransferTimeSeconds);
             
             // Show results
@@ -408,6 +452,8 @@
         // Recalculate when inputs change
         document.getElementById('dataAmount').addEventListener('input', calculate);
         document.getElementById('dataUnit').addEventListener('change', onDataUnitChange);
+        document.getElementById('distance').addEventListener('input', calculate);
+        document.getElementById('distanceUnit').addEventListener('change', calculate);
         document.getElementById('transport').addEventListener('change', calculate);
     </script>
 </body>
