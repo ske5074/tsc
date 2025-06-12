@@ -169,42 +169,42 @@
     </div>
 
     <script>
-        // Configuration data - easily editable JSON structures
+        // Configuration data - easily editable JSON structures (using mebibytes as reference)
         const dataUnits = [
-            { name: "nibbles", megabytes: 0.0000005, default: false },
-            { name: "bytes", megabytes: 0.000001, default: false },
-            { name: "blocks", megabytes: 0.000512, default: false },
-            { name: "KiB", megabytes: 0.001024, default: false },
-            { name: "KB", megabytes: 0.001, default: false },
-            { name: "MiB", megabytes: 1.048576, default: false },
-            { name: "MB", megabytes: 1, default: true },
-            { name: "GiB", megabytes: 1073.741824, default: false },
-            { name: "GB", megabytes: 1000, default: false },
-            { name: "TiB", megabytes: 1099511.627776, default: false },
-            { name: "TB", megabytes: 1000000, default: false },
-            { name: "PiB", megabytes: 1125899906.842624, default: false },
-            { name: "PB", megabytes: 1000000000, default: false },
-            { name: "Floppy 1.44MB", megabytes: 1.47456, default: false },
-            { name: "CD (650MB)", megabytes: 650, default: false },
-            { name: "DVD Single (4.7GB)", megabytes: 4700, default: false },
-            { name: "DVD Dual (8.5GB)", megabytes: 8500, default: false },
-            { name: "Blu-ray Single (25GB)", megabytes: 25000, default: false },
-            { name: "Blu-ray Dual (50GB)", megabytes: 50000, default: false },
-            { name: "Punch Card", megabytes: 0.00008, default: false }
+            { name: "nibbles", mebibytes: 0.00000047683716, default: false },
+            { name: "bytes", mebibytes: 0.00000095367432, default: false },
+            { name: "blocks", mebibytes: 0.00048828125, default: false },
+            { name: "KiB", mebibytes: 0.0009765625, default: false },
+            { name: "KB", mebibytes: 0.00095367432, default: false },
+            { name: "MiB", mebibytes: 1, default: false },
+            { name: "MB", mebibytes: 0.95367432, default: true },
+            { name: "GiB", mebibytes: 1024, default: false },
+            { name: "GB", mebibytes: 953.67432, default: false },
+            { name: "TiB", mebibytes: 1048576, default: false },
+            { name: "TB", mebibytes: 953674.32, default: false },
+            { name: "PiB", mebibytes: 1073741824, default: false },
+            { name: "PB", mebibytes: 953674316.40625, default: false },
+            { name: "Floppy 1.44MB", mebibytes: 1.40625, default: false },
+            { name: "CD (650MB)", mebibytes: 619.88769531, default: false },
+            { name: "DVD Single (4.7GB)", mebibytes: 4482.26928711, default: false },
+            { name: "DVD Dual (8.5GB)", mebibytes: 8106.23168945, default: false },
+            { name: "Blu-ray Single (25GB)", mebibytes: 23841.857910, default: false },
+            { name: "Blu-ray Dual (50GB)", mebibytes: 47683.715820, default: false },
+            { name: "Punch Card", mebibytes: 0.00007629395, default: false }
         ];
 
         const transportMethods = [
-            { name: "10baseT Ethernet (10 Mbps)", megabytesPerSecond: 1.25, default: false },
-            { name: "100baseT Ethernet (100 Mbps)", megabytesPerSecond: 12.5, default: true },
-            { name: "1000baseT Ethernet (1 Gbps)", megabytesPerSecond: 125, default: false },
-            { name: "1000baseLX Ethernet (1 Gbps)", megabytesPerSecond: 125, default: false },
-            { name: "2Gbit Fiber Single Mode", megabytesPerSecond: 250, default: false },
-            { name: "4Gbit Fiber Single Mode", megabytesPerSecond: 500, default: false },
-            { name: "4Gbit Fiber Multimode", megabytesPerSecond: 500, default: false },
-            { name: "IBM 9-Track Tape", megabytesPerSecond: 0.015625, default: false },
-            { name: "IBM 1440 Punch Card Reader", megabytesPerSecond: 0.003125, default: false },
-            { name: "Marconi Telegraph", megabytesPerSecond: 0.0000000125, default: false },
-            { name: "Pony Express (10 mph avg)", megabytesPerSecond: 0.00000000000058, default: false }
+            { name: "10baseT Ethernet (10 Mbps)", mebibytesPerSecond: 1.192093, default: false },
+            { name: "100baseT Ethernet (100 Mbps)", mebibytesPerSecond: 11.92093, default: true },
+            { name: "1000baseT Ethernet (1 Gbps)", mebibytesPerSecond: 119.2093, default: false },
+            { name: "1000baseLX Ethernet (1 Gbps)", mebibytesPerSecond: 119.2093, default: false },
+            { name: "2Gbit Fiber Single Mode", mebibytesPerSecond: 238.4186, default: false },
+            { name: "4Gbit Fiber Single Mode", mebibytesPerSecond: 476.8372, default: false },
+            { name: "4Gbit Fiber Multimode", mebibytesPerSecond: 476.8372, default: false },
+            { name: "IBM 9-Track Tape", mebibytesPerSecond: 0.01490116, default: false },
+            { name: "IBM 1440 Punch Card Reader", mebibytesPerSecond: 0.00298023, default: false },
+            { name: "Marconi Telegraph", mebibytesPerSecond: 0.000000011921, default: false },
+            { name: "Pony Express (10 mph avg)", mebibytesPerSecond: 0.00000000000055, default: false }
         ];
 
         // Initialize dropdowns from JSON data
@@ -215,7 +215,7 @@
             // Populate data units
             dataUnits.forEach(unit => {
                 const option = document.createElement('option');
-                option.value = unit.megabytes;
+                option.value = unit.mebibytes;
                 option.textContent = unit.name;
                 option.selected = unit.default;
                 dataUnitSelect.appendChild(option);
@@ -224,30 +224,30 @@
             // Populate transport methods
             transportMethods.forEach(transport => {
                 const option = document.createElement('option');
-                option.value = transport.megabytesPerSecond;
+                option.value = transport.mebibytesPerSecond;
                 option.textContent = transport.name;
                 option.selected = transport.default;
                 transportSelect.appendChild(option);
             });
         }
 
-        let currentDataInMegabytes = 100; // Track data in megabytes
+        let currentDataInMebibytes = 100 * 0.95367432; // Track data in mebibytes (100 MB default)
 
         function calculate() {
             const dataAmount = parseFloat(document.getElementById('dataAmount').value);
             const dataUnit = parseFloat(document.getElementById('dataUnit').value);
-            const transportRate = parseFloat(document.getElementById('transport').value); // MB/s
+            const transportRate = parseFloat(document.getElementById('transport').value); // MiB/s
             
             if (!dataAmount || dataAmount <= 0) {
                 alert('Please enter a valid data amount');
                 return;
             }
 
-            // Update current data in megabytes
-            currentDataInMegabytes = dataAmount * dataUnit;
+            // Update current data in mebibytes
+            currentDataInMebibytes = dataAmount * dataUnit;
 
             // Calculate transfer time in seconds
-            const transferTimeSeconds = currentDataInMegabytes / transportRate;
+            const transferTimeSeconds = currentDataInMebibytes / transportRate;
             
             // Get the selected option text for display
             const dataUnitSelect = document.getElementById('dataUnit');
@@ -261,7 +261,7 @@
             // Update results
             document.getElementById('summary').textContent = summaryText;
             document.getElementById('dataAmountDisplay').textContent = `${dataAmount.toLocaleString()} ${dataUnitText}`;
-            document.getElementById('transferRate').textContent = formatMBRate(transportRate);
+            document.getElementById('transferRate').textContent = formatMiBRate(transportRate);
             document.getElementById('transferTime').textContent = formatTime(transferTimeSeconds);
             
             // Show results
@@ -270,7 +270,7 @@
 
         function onDataUnitChange() {
             const newDataUnit = parseFloat(document.getElementById('dataUnit').value);
-            const newDataAmount = currentDataInMegabytes / newDataUnit;
+            const newDataAmount = currentDataInMebibytes / newDataUnit;
             
             // Round to reasonable precision
             let roundedAmount;
@@ -297,11 +297,11 @@
             return num.toLocaleString();
         }
 
-        function formatMBRate(mbps) {
-            if (mbps >= 1000) return (mbps / 1000).toFixed(2) + ' GB/s';
-            if (mbps >= 1) return mbps.toFixed(2) + ' MB/s';
-            if (mbps >= 0.001) return (mbps * 1000).toFixed(2) + ' KB/s';
-            return (mbps * 1000000).toFixed(2) + ' B/s';
+        function formatMiBRate(mibps) {
+            if (mibps >= 1024) return (mibps / 1024).toFixed(2) + ' GiB/s';
+            if (mibps >= 1) return mibps.toFixed(2) + ' MiB/s';
+            if (mibps >= 0.0009765625) return (mibps * 1024).toFixed(2) + ' KiB/s';
+            return (mibps * 1048576).toFixed(2) + ' B/s';
         }
 
         function formatTime(seconds) {
