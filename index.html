@@ -1,83 +1,368 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html manifest="OfflineApp.manifest">
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transport Speed Calculator</title>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="minimum-scale=1.0, maximum-scale=1, width=device-width, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <link rel="stylesheet" href="main.css">
-    <link rel="stylesheet" type="text/css" href="Parts/Transitions.css">
-    <script type="text/javascript" src="Parts/parts.js" charset="utf-8"></script>
-    <script type="text/javascript" src="main.js" charset="utf-8"></script>
-    <script type="text/javascript" src="Parts/ButtonHandler.js" charset="utf-8"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .calculator {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            font-weight: 300;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        input:focus, select:focus {
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .summary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .results {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 25px;
+            border-left: 5px solid #667eea;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .result-value {
+            font-family: 'SF Mono', Monaco, monospace;
+            color: #333;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .row {
+                grid-template-columns: 1fr;
+            }
+            
+            .calculator {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
 </head>
-<body onload="load();">
-<div id="views">
-  <div id="front">
-    <div id="background">
-      <div id="box1">
-        <div id="text4"></div>
-
+<body>
+    <div class="calculator">
+        <h1>Transport Speed Calculator</h1>
         
-        <input type="text" name="textfield_ideal_days" value="" id="textfield_ideal_days">
+        <div class="input-group">
+            <label for="dataAmount">Data Amount:</label>
+            <input type="number" id="dataAmount" placeholder="Enter amount" value="100" min="0" step="any">
+        </div>
 
-      </div>
-      <div id="box">
-        <select name="popup_dm_unit" id="popup_dm_unit" onChange="onchange_dm_unit(event)" apple-style-relative="height: 20px;">
-          <option value="nibbles">nibbles</option>
-          <option value="bytes">bytes</option>
-          <option value="blocks">blocks</option>
-          <option value="KiB,KB">KiB,KB</option>
-          <option value="MiB,MB">MiB,MB</option>
-          <option value="GiB,GB" selected="selected">GiB,GB</option>
-          <option value="TiB,TB">TiB,TB</option>
-          <option value="PiB,PB">PiB,PB</option>
-          <option value="KB Phys">KB Phys</option>
-          <option value="MB Phys">MB Phys</option>
-          <option value="GB Phys">GB Phys</option>
-          <option value="TB Phys">TB Phys</option>
-          <option value="PB Phys">PB Phys</option>
-          <option value="Floppy 1.44MiB">Floppy 1.44MiB</option>
-          <option value="CD">CD </option>
-          <option value="DVD Single">DVD Single</option>
-          <option value="DVD Dual">DVD Dual</option>
-          <option value="Blueray Single">Blueray Single</option>
-          <option value="Blueray Dual">Blueray Dual</option>
-          <option value="Punch Card">Punch Card</option>
-          <option value="Apollo Flight Computer">Apollo Flight Computer</option>
-        </select>
-        <input type="text" name="textfield_data_amt" value="10" id="textfield_data_amt" maxlength="0" onChange="onchange_popup_transport(event)">
-        <div id="text2"></div>
-        <div id="text3"></div>
-        <select apple-style-relative="height: 20px;" id="popup_transport" name="popup_transport" onChange="onchange_popup_transport(event)">
-          <option selected="selected">Select a Transport</option>
-          <option value="10">10baseT Ethernet</option>
-          <option value="20">100baseT Ethernet</option>
-          <option value="30">1000baseT Ethernet</option>
-          <option value="40">1000baseLX Ethernet</option>
-          <option value="50">2gbit Fiber Single Mode 1300nm Longwave</option>
-          <option value="60">4gbit Fiber Single Mode 1300nm Longwave</option>
-          <option value="70">4gbit Fiber Multimode 850nm Shortwave</option>
-          <option value="80">IBM 9-Track Tape (3400 series)</option>
-          <option value="90">IBM 1440 Punch Card Reader</option>
-          <option value="100">Marcony Telegraph Wires</option>
-          <option value="110">Pony express</option>
-        </select>
-      </div>
+        <div class="row">
+            <div class="input-group">
+                <label for="dataUnit">Data Unit:</label>
+                <select id="dataUnit"></select>
+            </div>
+
+            <div class="input-group">
+                <label for="transport">Transport Method:</label>
+                <select id="transport"></select>
+            </div>
+        </div>
+
+        <div class="results" id="results" style="display: none;">
+            <div class="summary" id="summary"></div>
+            <div class="result-item">
+                <span class="result-label">Data Amount:</span>
+                <span class="result-value" id="dataAmountDisplay"></span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Transfer Rate:</span>
+                <span class="result-value" id="transferRate"></span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Transfer Time:</span>
+                <span class="result-value" id="transferTime"></span>
+            </div>
+        </div>
     </div>
-    <div id="title"></div>
-    <div id="infoButton" checked="checked"></div>
-  </div>
-  <div id="settings">
-    <div id="header">
-      <div id="done"></div>
-      <div id="text"></div>
-    </div>
-    <div id="mailButton"></div>
-    <div id="text1"></div>
-    <div id="text5"></div>
-    <div id="text6"></div>
-  </div>
-</div>
+
+    <script>
+        // Configuration data - easily editable JSON structures (using mebibytes as reference)
+        const dataUnits = [
+            { name: "nibbles", mebibytes: 0.00000047683716, default: false },
+            { name: "bytes", mebibytes: 0.00000095367432, default: false },
+            { name: "blocks", mebibytes: 0.00048828125, default: false },
+            { name: "KiB", mebibytes: 0.0009765625, default: false },
+            { name: "KB", mebibytes: 0.00095367432, default: false },
+            { name: "MiB", mebibytes: 1, default: false },
+            { name: "MB", mebibytes: 0.95367432, default: true },
+            { name: "GiB", mebibytes: 1024, default: false },
+            { name: "GB", mebibytes: 953.67432, default: false },
+            { name: "TiB", mebibytes: 1048576, default: false },
+            { name: "TB", mebibytes: 953674.32, default: false },
+            { name: "PiB", mebibytes: 1073741824, default: false },
+            { name: "PB", mebibytes: 953674316.40625, default: false },
+            { name: "Floppy 1.44MB", mebibytes: 1.40625, default: false },
+            { name: "CD (650MB)", mebibytes: 619.88769531, default: false },
+            { name: "DVD Single (4.7GB)", mebibytes: 4482.26928711, default: false },
+            { name: "DVD Dual (8.5GB)", mebibytes: 8106.23168945, default: false },
+            { name: "Blu-ray Single (25GB)", mebibytes: 23841.857910, default: false },
+            { name: "Blu-ray Dual (50GB)", mebibytes: 47683.715820, default: false },
+            { name: "Punch Card", mebibytes: 0.00007629395, default: false }
+        ];
+
+        const transportMethods = [
+            { name: "10baseT Ethernet (10 Mbps)", mebibytesPerSecond: 1.192093, default: false },
+            { name: "100baseT Ethernet (100 Mbps)", mebibytesPerSecond: 11.92093, default: true },
+            { name: "1000baseT Ethernet (1 Gbps)", mebibytesPerSecond: 119.2093, default: false },
+            { name: "1000baseLX Ethernet (1 Gbps)", mebibytesPerSecond: 119.2093, default: false },
+            { name: "2Gbit Fiber Single Mode", mebibytesPerSecond: 238.4186, default: false },
+            { name: "4Gbit Fiber Single Mode", mebibytesPerSecond: 476.8372, default: false },
+            { name: "4Gbit Fiber Multimode", mebibytesPerSecond: 476.8372, default: false },
+            { name: "IBM 9-Track Tape", mebibytesPerSecond: 0.01490116, default: false },
+            { name: "IBM 1440 Punch Card Reader", mebibytesPerSecond: 0.00298023, default: false },
+            { name: "Marconi Telegraph", mebibytesPerSecond: 0.000000011921, default: false },
+            { name: "Pony Express (10 mph avg)", mebibytesPerSecond: 0.00000000000055, default: false }
+        ];
+
+        // Initialize dropdowns from JSON data
+        function initializeDropdowns() {
+            const dataUnitSelect = document.getElementById('dataUnit');
+            const transportSelect = document.getElementById('transport');
+
+            // Populate data units
+            dataUnits.forEach(unit => {
+                const option = document.createElement('option');
+                option.value = unit.mebibytes;
+                option.textContent = unit.name;
+                option.selected = unit.default;
+                dataUnitSelect.appendChild(option);
+            });
+
+            // Populate transport methods
+            transportMethods.forEach(transport => {
+                const option = document.createElement('option');
+                option.value = transport.mebibytesPerSecond;
+                option.textContent = transport.name;
+                option.selected = transport.default;
+                transportSelect.appendChild(option);
+            });
+        }
+
+        let currentDataInMebibytes = 100 * 0.95367432; // Track data in mebibytes (100 MB default)
+
+        function calculate() {
+            const dataAmount = parseFloat(document.getElementById('dataAmount').value);
+            const dataUnit = parseFloat(document.getElementById('dataUnit').value);
+            const transportRate = parseFloat(document.getElementById('transport').value); // MiB/s
+            
+            if (!dataAmount || dataAmount <= 0) {
+                alert('Please enter a valid data amount');
+                return;
+            }
+
+            // Update current data in mebibytes
+            currentDataInMebibytes = dataAmount * dataUnit;
+
+            // Calculate transfer time in seconds
+            const transferTimeSeconds = currentDataInMebibytes / transportRate;
+            
+            // Get the selected option text for display
+            const dataUnitSelect = document.getElementById('dataUnit');
+            const transportSelect = document.getElementById('transport');
+            const dataUnitText = dataUnitSelect.options[dataUnitSelect.selectedIndex].text;
+            const transportText = transportSelect.options[transportSelect.selectedIndex].text;
+            
+            // Create summary text
+            const summaryText = `For ${dataAmount.toLocaleString()} ${dataUnitText}, it will take ${formatTime(transferTimeSeconds)} using ${transportText}.`;
+            
+            // Update results
+            document.getElementById('summary').textContent = summaryText;
+            document.getElementById('dataAmountDisplay').textContent = `${dataAmount.toLocaleString()} ${dataUnitText}`;
+            document.getElementById('transferRate').textContent = formatMiBRate(transportRate);
+            document.getElementById('transferTime').textContent = formatTime(transferTimeSeconds);
+            
+            // Show results
+            document.getElementById('results').style.display = 'block';
+        }
+
+        function onDataUnitChange() {
+            const newDataUnit = parseFloat(document.getElementById('dataUnit').value);
+            const newDataAmount = currentDataInMebibytes / newDataUnit;
+            
+            // Round to reasonable precision
+            let roundedAmount;
+            if (newDataAmount >= 1000) {
+                roundedAmount = Math.round(newDataAmount);
+            } else if (newDataAmount >= 100) {
+                roundedAmount = Math.round(newDataAmount * 10) / 10;
+            } else if (newDataAmount >= 10) {
+                roundedAmount = Math.round(newDataAmount * 100) / 100;
+            } else {
+                roundedAmount = Math.round(newDataAmount * 1000) / 1000;
+            }
+            
+            document.getElementById('dataAmount').value = roundedAmount;
+            calculate();
+        }
+
+        function formatNumber(num) {
+            if (num >= 1e15) return (num / 1e15).toFixed(2) + ' P';
+            if (num >= 1e12) return (num / 1e12).toFixed(2) + ' T';
+            if (num >= 1e9) return (num / 1e9).toFixed(2) + ' G';
+            if (num >= 1e6) return (num / 1e6).toFixed(2) + ' M';
+            if (num >= 1e3) return (num / 1e3).toFixed(2) + ' K';
+            return num.toLocaleString();
+        }
+
+        function formatMiBRate(mibps) {
+            if (mibps >= 1024) return (mibps / 1024).toFixed(2) + ' GiB/s';
+            if (mibps >= 1) return mibps.toFixed(2) + ' MiB/s';
+            if (mibps >= 0.0009765625) return (mibps * 1024).toFixed(2) + ' KiB/s';
+            return (mibps * 1048576).toFixed(2) + ' B/s';
+        }
+
+        function formatTime(seconds) {
+            if (seconds < 0.001) {
+                return Math.round(seconds * 1000000) + ' microseconds';
+            } else if (seconds < 1) {
+                return Math.round(seconds * 1000) + ' milliseconds';
+            } else if (seconds < 60) {
+                const wholeSeconds = Math.floor(seconds);
+                const milliseconds = Math.round((seconds - wholeSeconds) * 1000);
+                if (milliseconds > 0) {
+                    return `${wholeSeconds} seconds, ${milliseconds} milliseconds`;
+                }
+                return wholeSeconds + ' seconds';
+            } else if (seconds < 3600) {
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = Math.floor(seconds % 60);
+                if (remainingSeconds > 0) {
+                    return `${minutes} minutes, ${remainingSeconds} seconds`;
+                }
+                return minutes + ' minutes';
+            } else if (seconds < 86400) {
+                const hours = Math.floor(seconds / 3600);
+                const minutes = Math.floor((seconds % 3600) / 60);
+                const remainingSeconds = Math.floor(seconds % 60);
+                
+                let result = hours + ' hours';
+                if (minutes > 0) result += ', ' + minutes + ' minutes';
+                if (remainingSeconds > 0 && hours < 10) result += ', ' + remainingSeconds + ' seconds';
+                return result;
+            } else if (seconds < 31536000) {
+                const days = Math.floor(seconds / 86400);
+                const hours = Math.floor((seconds % 86400) / 3600);
+                const minutes = Math.floor((seconds % 3600) / 60);
+                
+                let result = days + ' days';
+                if (hours > 0) result += ', ' + hours + ' hours';
+                if (minutes > 0 && days < 10) result += ', ' + minutes + ' minutes';
+                return result;
+            } else {
+                const years = Math.floor(seconds / 31536000);
+                const days = Math.floor((seconds % 31536000) / 86400);
+                const hours = Math.floor((seconds % 86400) / 3600);
+                
+                let result = years + ' years';
+                if (days > 0) result += ', ' + days + ' days';
+                if (hours > 0 && years < 10) result += ', ' + hours + ' hours';
+                return result;
+            }
+        }
+
+        // Calculate on page load with default values
+        window.onload = function() {
+            initializeDropdowns();
+            calculate();
+        };
+
+        // Recalculate when inputs change
+        document.getElementById('dataAmount').addEventListener('input', calculate);
+        document.getElementById('dataUnit').addEventListener('change', onDataUnitChange);
+        document.getElementById('transport').addEventListener('change', calculate);
+    </script>
 </body>
 </html>
