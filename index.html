@@ -146,6 +146,21 @@
             </div>
 
             <div class="input-group">
+                <label for="distance">Distance:</label>
+                <input type="number" id="distance" placeholder="Enter distance" value="100" min="0" step="any">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-group">
+                <label for="distanceUnit">Distance Unit:</label>
+                <select id="distanceUnit">
+                    <option value="1">Miles</option>
+                    <option value="1.609344">Kilometers</option>
+                </select>
+            </div>
+
+            <div class="input-group">
                 <label for="transport">Transport Method:</label>
                 <select id="transport"></select>
             </div>
@@ -177,34 +192,45 @@
             { name: "KiB", mebibytes: 0.0009765625, default: false },
             { name: "KB", mebibytes: 0.00095367432, default: false },
             { name: "MiB", mebibytes: 1, default: false },
-            { name: "MB", mebibytes: 0.95367432, default: true },
+            { name: "MB", mebibytes: 0.95367432, default: false },
             { name: "GiB", mebibytes: 1024, default: false },
             { name: "GB", mebibytes: 953.67432, default: false },
             { name: "TiB", mebibytes: 1048576, default: false },
-            { name: "TB", mebibytes: 953674.32, default: false },
+            { name: "TB", mebibytes: 953674.31640625, default: true },
             { name: "PiB", mebibytes: 1073741824, default: false },
             { name: "PB", mebibytes: 953674316.40625, default: false },
-            { name: "Floppy 1.44MB", mebibytes: 1.40625, default: false },
+            { name: "Floppy 1.44MB", mebibytes: 1.37329, default: false },
             { name: "CD (650MB)", mebibytes: 619.88769531, default: false },
             { name: "DVD Single (4.7GB)", mebibytes: 4482.26928711, default: false },
             { name: "DVD Dual (8.5GB)", mebibytes: 8106.23168945, default: false },
             { name: "Blu-ray Single (25GB)", mebibytes: 23841.857910, default: false },
             { name: "Blu-ray Dual (50GB)", mebibytes: 47683.715820, default: false },
-            { name: "Punch Card", mebibytes: 0.00007629395, default: false }
+            { name: "Punch Card", mebibytes: 0.00007629395, default: false },
+            { name: "Apollo Flight Computer", mebibytes: 0.0724792480469, default: false }
         ];
 
         const transportMethods = [
-            { name: "10baseT Ethernet (10 Mbps)", mebibytesPerSecond: 1.192093, default: false },
-            { name: "100baseT Ethernet (100 Mbps)", mebibytesPerSecond: 11.92093, default: true },
-            { name: "1000baseT Ethernet (1 Gbps)", mebibytesPerSecond: 119.2093, default: false },
-            { name: "1000baseLX Ethernet (1 Gbps)", mebibytesPerSecond: 119.2093, default: false },
-            { name: "2Gbit Fiber Single Mode", mebibytesPerSecond: 238.4186, default: false },
-            { name: "4Gbit Fiber Single Mode", mebibytesPerSecond: 476.8372, default: false },
-            { name: "4Gbit Fiber Multimode", mebibytesPerSecond: 476.8372, default: false },
-            { name: "IBM 9-Track Tape", mebibytesPerSecond: 0.01490116, default: false },
-            { name: "IBM 1440 Punch Card Reader", mebibytesPerSecond: 0.00298023, default: false },
-            { name: "Marconi Telegraph", mebibytesPerSecond: 0.000000011921, default: false },
-            { name: "Pony Express (10 mph avg)", mebibytesPerSecond: 0.00000000000055, default: false }
+            { name: "10baseT Ethernet", mebibytesPerSecond: 1.192093, latencyPerMile: 0.000016, default: false },
+            { name: "100baseT Ethernet", mebibytesPerSecond: 11.920929, latencyPerMile: 0.000016, default: false },
+            { name: "1000baseT Ethernet", mebibytesPerSecond: 119.209290, latencyPerMile: 0.000016, default: false },
+            { name: "1000baseLX Ethernet", mebibytesPerSecond: 119.209290, latencyPerMile: 0.000005, default: false },
+            { name: "2Gbit Fiber Single Mode", mebibytesPerSecond: 238.418579, latencyPerMile: 0.000005, default: false },
+            { name: "4Gbit Fiber Single Mode", mebibytesPerSecond: 476.837158, latencyPerMile: 0.000005, default: false },
+            { name: "4Gbit Fiber Multimode", mebibytesPerSecond: 476.837158, latencyPerMile: 0.000008, default: false },
+            { name: "10GbE Ethernet", mebibytesPerSecond: 1192.092896, latencyPerMile: 0.000005, default: true },
+            { name: "25GbE Ethernet", mebibytesPerSecond: 2980.232239, latencyPerMile: 0.000005, default: false },
+            { name: "40GbE Ethernet", mebibytesPerSecond: 4768.371582, latencyPerMile: 0.000005, default: false },
+            { name: "100GbE Ethernet", mebibytesPerSecond: 11920.928955, latencyPerMile: 0.000005, default: false },
+            { name: "200GbE Ethernet", mebibytesPerSecond: 23841.857910, latencyPerMile: 0.000005, default: false },
+            { name: "400GbE Ethernet", mebibytesPerSecond: 47683.715820, latencyPerMile: 0.000005, default: false },
+            { name: "8Gbit Fibre Channel", mebibytesPerSecond: 810.55, latencyPerMile: 0.000005, default: false },
+            { name: "16Gbit Fibre Channel", mebibytesPerSecond: 1525.88, latencyPerMile: 0.000005, default: false },
+            { name: "32Gbit Fibre Channel", mebibytesPerSecond: 6103.52, latencyPerMile: 0.000005, default: false },
+            { name: "64Gbit Fibre Channel", mebibytesPerSecond: 12207.03, latencyPerMile: 0.000005, default: false },
+            { name: "IBM 9-Track Tape", mebibytesPerSecond: 0.01490116, latencyPerMile: 0, default: false },
+            { name: "IBM 1440 Punch Card Reader", mebibytesPerSecond: 0.00298023, latencyPerMile: 0, default: false },
+            { name: "Marconi Telegraph", mebibytesPerSecond: 0.000001986821, latencyPerMile: 0.000005, default: false },
+            { name: "Pony Express (10 mph avg)", mebibytesPerSecond: 0.00000000000055, latencyPerMile: 360, default: false }
         ];
 
         // Initialize dropdowns from JSON data
@@ -224,19 +250,26 @@
             // Populate transport methods
             transportMethods.forEach(transport => {
                 const option = document.createElement('option');
-                option.value = transport.mebibytesPerSecond;
+                option.value = JSON.stringify({
+                    speed: transport.mebibytesPerSecond,
+                    latency: transport.latencyPerMile
+                });
                 option.textContent = transport.name;
                 option.selected = transport.default;
                 transportSelect.appendChild(option);
             });
         }
 
-        let currentDataInMebibytes = 100 * 0.95367432; // Track data in mebibytes (100 MB default)
+        let currentDataInMebibytes = 100 * 953674.31640625; // Track data in mebibytes (100 TB default)
 
         function calculate() {
             const dataAmount = parseFloat(document.getElementById('dataAmount').value);
             const dataUnit = parseFloat(document.getElementById('dataUnit').value);
-            const transportRate = parseFloat(document.getElementById('transport').value); // MiB/s
+            const distance = parseFloat(document.getElementById('distance').value) || 0;
+            const distanceUnit = parseFloat(document.getElementById('distanceUnit').value);
+            const transportData = JSON.parse(document.getElementById('transport').value);
+            const transportRate = transportData.speed; // MiB/s
+            const latencyPerMile = transportData.latency; // seconds per mile
             
             if (!dataAmount || dataAmount <= 0) {
                 alert('Please enter a valid data amount');
@@ -246,23 +279,36 @@
             // Update current data in mebibytes
             currentDataInMebibytes = dataAmount * dataUnit;
 
-            // Calculate transfer time in seconds
-            const transferTimeSeconds = currentDataInMebibytes / transportRate;
+            // Calculate transfer time in seconds (pure data transfer)
+            const dataTransferTimeSeconds = currentDataInMebibytes / transportRate;
+            
+            // Calculate latency based on distance
+            const distanceInMiles = distance * distanceUnit;
+            const latencySeconds = distanceInMiles * latencyPerMile;
+            
+            // Total time = data transfer + latency
+            const totalTransferTimeSeconds = dataTransferTimeSeconds + latencySeconds;
             
             // Get the selected option text for display
             const dataUnitSelect = document.getElementById('dataUnit');
             const transportSelect = document.getElementById('transport');
+            const distanceUnitSelect = document.getElementById('distanceUnit');
             const dataUnitText = dataUnitSelect.options[dataUnitSelect.selectedIndex].text;
             const transportText = transportSelect.options[transportSelect.selectedIndex].text;
+            const distanceUnitText = distanceUnitSelect.options[distanceUnitSelect.selectedIndex].text;
             
             // Create summary text
-            const summaryText = `For ${dataAmount.toLocaleString()} ${dataUnitText}, it will take ${formatTime(transferTimeSeconds)} using ${transportText}.`;
+            let summaryText = `For ${dataAmount.toLocaleString()} ${dataUnitText}`;
+            if (distance > 0) {
+                summaryText += ` over ${distance.toLocaleString()} ${distanceUnitText.toLowerCase()}`;
+            }
+            summaryText += `, it will take ${formatTime(totalTransferTimeSeconds)} using ${transportText}.`;
             
             // Update results
             document.getElementById('summary').textContent = summaryText;
             document.getElementById('dataAmountDisplay').textContent = `${dataAmount.toLocaleString()} ${dataUnitText}`;
             document.getElementById('transferRate').textContent = formatMiBRate(transportRate);
-            document.getElementById('transferTime').textContent = formatTime(transferTimeSeconds);
+            document.getElementById('transferTime').textContent = formatTime(totalTransferTimeSeconds);
             
             // Show results
             document.getElementById('results').style.display = 'block';
