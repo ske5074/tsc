@@ -1,460 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transport Speed Calculator</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .calculator {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
-            width: 100%;
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 30px;
-            font-size: 2.5rem;
-            font-weight: 300;
-        }
-
-        .input-group {
-            margin-bottom: 25px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #555;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            background: white;
-        }
-
-        input:focus, select:focus {
-            border-color: #667eea;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        .summary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            font-size: 1.1rem;
-            font-weight: 500;
-            text-align: center;
-            line-height: 1.5;
-        }
-
-        .results {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 25px;
-            margin-top: 25px;
-            border-left: 5px solid #667eea;
-        }
-
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .result-item:last-child {
-            border-bottom: none;
-        }
-
-        .result-label {
-            font-weight: 600;
-            color: #555;
-        }
-
-        .result-value {
-            font-family: 'SF Mono', Monaco, monospace;
-            color: #333;
-            font-weight: 500;
-        }
-
-        @media (max-width: 768px) {
-            .row {
-                grid-template-columns: 1fr;
-            }
-            
-            .calculator {
-                padding: 20px;
-            }
-            
-            h1 {
-                font-size: 2rem;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transport Speed Calculator</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(135deg,#667eea,#764ba2);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.calculator{background:rgba(255,255,255,.95);border-radius:20px;padding:40px;box-shadow:0 20px 40px rgba(0,0,0,.1);max-width:800px;width:100%}
+h1{text-align:center;color:#333;margin-bottom:30px;font-size:2.5rem;font-weight:300}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.input-group{margin-bottom:25px}
+label{display:block;margin-bottom:8px;font-weight:600;color:#555}
+input,select{width:100%;padding:15px;border:2px solid #e0e0e0;border-radius:10px;font-size:16px;background:#fff;transition:all .3s}
+input:focus,select:focus{border-color:#667eea;outline:none;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.results{background:#f8f9fa;border-radius:15px;padding:25px;border-left:5px solid #667eea}
+.summary{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:20px;border-radius:10px;margin-bottom:20px;font-size:1.1rem;font-weight:500;text-align:center;line-height:1.5}
+.result-item{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #e0e0e0}
+.result-item:last-child{border-bottom:none}
+.result-item span:first-child{font-weight:600;color:#555}
+.result-item span:last-child{font-family:'SF Mono',Monaco,monospace;color:#333;text-align:right}
+@media(max-width:768px){.row{grid-template-columns:1fr}.calculator{padding:20px}h1{font-size:2rem}}
+</style>
 </head>
 <body>
-    <div class="calculator">
-        <h1>Transport Speed Calculator</h1>
-        
-        <div class="input-group">
-            <label for="dataAmount">Data Amount:</label>
-            <input type="number" id="dataAmount" placeholder="Enter amount" value="100" min="0" step="any">
-        </div>
+<div class="calculator">
+<h1>Transport Speed Calculator</h1>
+<div class="input-group"><label for="dataAmount">Data Amount:</label><input type="number" id="dataAmount" value="100" min="0" step="any"></div>
+<div class="row">
+<div class="input-group"><label for="dataUnit">Data Unit:</label><select id="dataUnit"></select></div>
+<div class="input-group"><label for="transport">Transport Method:</label><select id="transport"></select></div>
+</div>
+<div class="row">
+<div class="input-group"><label for="distance">Distance:</label><input type="number" id="distance" value="100" min="0" step="any"></div>
+<div class="input-group"><label for="distanceUnit">Distance Unit:</label><select id="distanceUnit"><option value="1">Miles</option><option value="0.621371">Kilometers</option></select></div>
+</div>
+<div class="results">
+<div class="summary" id="summary"></div>
+<div class="result-item"><span>Data Amount:</span><span id="amountOut"></span></div>
+<div class="result-item"><span>Max Transfer Rate:</span><span id="maxRateOut"></span></div>
+<div class="result-item"><span>Latency (RTT):</span><span id="rttOut"></span></div>
+<div class="result-item"><span>Latency Added:</span><span id="overheadOut"></span></div>
+<div class="result-item"><span>Effective Transfer Rate:</span><span id="rateOut"></span></div>
+<div class="result-item"><span>Transfer Time:</span><span id="timeOut"></span></div>
+</div>
+</div>
+<script>
+const MiB = 2 ** 20, FIBER = 8.2e-6; // light in fiber/copper ≈ 8.2 µs per mile
+const net = { mssBytes: 1460, lossRate: 1e-7, streams: 1 };
+const TCP = { latencyPerMile: FIBER, windowMiB: 16, lossy: true };
+const FC = { latencyPerMile: FIBER, windowMiB: 500 * 2112 / MiB }; // 500 buffer credits x 2112-byte frames
 
-        <div class="row">
-            <div class="input-group">
-                <label for="dataUnit">Data Unit:</label>
-                <select id="dataUnit"></select>
-            </div>
+const dataUnits = [
+    { name: "nibbles", mebibytes: 0.5 / MiB },
+    { name: "bytes", mebibytes: 1 / MiB },
+    { name: "blocks", mebibytes: 512 / MiB },
+    { name: "KiB", desc: "Kibibyte (2^10)", mebibytes: 2 ** 10 / MiB },
+    { name: "KB", desc: "Kilobyte (10^3)", mebibytes: 1e3 / MiB },
+    { name: "MiB", desc: "Mebibyte (2^20)", mebibytes: 1 },
+    { name: "MB", desc: "Megabyte (10^6)", mebibytes: 1e6 / MiB },
+    { name: "GiB", desc: "Gibibyte (2^30)", mebibytes: 2 ** 10 },
+    { name: "GB", desc: "Gigabyte (10^9)", mebibytes: 1e9 / MiB },
+    { name: "TiB", desc: "Tebibyte (2^40)", mebibytes: 2 ** 20 },
+    { name: "TB", desc: "Terabyte (10^12)", mebibytes: 1e12 / MiB, default: true },
+    { name: "PiB", desc: "Pebibyte (2^50)", mebibytes: 2 ** 30 },
+    { name: "PB", desc: "Petabyte (10^15)", mebibytes: 1e15 / MiB },
+    { name: "EiB", desc: "Exbibyte (2^60)", mebibytes: 2 ** 40 },
+    { name: "EB", desc: "Exabyte (10^18)", mebibytes: 1e18 / MiB },
+    { name: "Floppy 1.44MB", mebibytes: 1474560 / MiB },
+    { name: "CD (650MB)", mebibytes: 650e6 / MiB },
+    { name: "DVD Single (4.7GB)", mebibytes: 4.7e9 / MiB },
+    { name: "DVD Dual (8.5GB)", mebibytes: 8.5e9 / MiB },
+    { name: "Blu-ray Single (25GB)", mebibytes: 25e9 / MiB },
+    { name: "Blu-ray Dual (50GB)", mebibytes: 50e9 / MiB },
+    { name: "Punch Card", mebibytes: 80 / MiB },
+    { name: "Apollo Flight Computer", mebibytes: 76 * 1024 / MiB }
+];
 
-            <div class="input-group">
-                <label for="transport">Transport Method:</label>
-                <select id="transport"></select>
-            </div>
-        </div>
+const transports = [
+    { name: "10 Megabit Ethernet", mebibytesPerSecond: 10e6 / 8 / MiB, ...TCP },
+    { name: "100 Megabit Ethernet", mebibytesPerSecond: 100e6 / 8 / MiB, ...TCP },
+    { name: "1 Gigabit Ethernet", mebibytesPerSecond: 1e9 / 8 / MiB, ...TCP },
+    { name: "10 Gigabit Ethernet", mebibytesPerSecond: 10e9 / 8 / MiB, ...TCP, default: true },
+    { name: "25 Gigabit Ethernet", mebibytesPerSecond: 25e9 / 8 / MiB, ...TCP },
+    { name: "40 Gigabit Ethernet", mebibytesPerSecond: 40e9 / 8 / MiB, ...TCP },
+    { name: "100 Gigabit Ethernet", mebibytesPerSecond: 100e9 / 8 / MiB, ...TCP },
+    { name: "200 Gigabit Ethernet", mebibytesPerSecond: 200e9 / 8 / MiB, ...TCP },
+    { name: "400 Gigabit Ethernet", mebibytesPerSecond: 400e9 / 8 / MiB, ...TCP },
+    { name: "1G Fibre Channel", mebibytesPerSecond: 100e6 / MiB, ...FC },
+    { name: "2G Fibre Channel", mebibytesPerSecond: 200e6 / MiB, ...FC },
+    { name: "4G Fibre Channel", mebibytesPerSecond: 400e6 / MiB, ...FC },
+    { name: "8G Fibre Channel", mebibytesPerSecond: 800e6 / MiB, ...FC },
+    { name: "16G Fibre Channel", mebibytesPerSecond: 1600e6 / MiB, ...FC },
+    { name: "32G Fibre Channel", mebibytesPerSecond: 3200e6 / MiB, ...FC },
+    { name: "64G Fibre Channel", mebibytesPerSecond: 6400e6 / MiB, ...FC },
+    { name: "IBM 9-Track Tape", mebibytesPerSecond: 15625 / MiB, latencyPerMile: 0 },
+    { name: "IBM 1440 Punch Card Reader", mebibytesPerSecond: 3125 / MiB, latencyPerMile: 0 },
+    { name: "Marconi Telegraph", mebibytesPerSecond: 2.083 / MiB, latencyPerMile: FIBER },
+    { name: "Pony Express (10 mph avg)", mebibytesPerSecond: 0.00000000000055, latencyPerMile: 360 }
+];
 
-        <div class="row">
-            <div class="input-group">
-                <label for="distance">Distance:</label>
-                <input type="number" id="distance" placeholder="Enter distance" value="100" min="0" step="any">
-            </div>
+const $ = id => document.getElementById(id);
+const fill = (sel, list, text) => list.forEach(x => sel.add(new Option(text(x), '', x.default, x.default)));
+const fmtNum = (n, d = 6) => n.toLocaleString(undefined, { maximumFractionDigits: d });
+const fmtRate = m => {
+    const [v, u] = m >= 1024 ? [m / 1024, 'GiB/s'] : m >= 1 ? [m, 'MiB/s'] : m * 1024 >= 1 ? [m * 1024, 'KiB/s'] : [m * MiB, 'B/s'];
+    return (v < 0.01 ? v.toPrecision(3) : fmtNum(v, 2)) + ' ' + u;
+};
+const timeUnits = [['year', 31536000], ['day', 86400], ['hour', 3600], ['minute', 60], ['second', 1]];
+const fmtTime = s => {
+    if (s < 1) return s < 0.001 ? `${Math.round(s * 1e6)} microseconds` : `${Math.round(s * 1000)} milliseconds`;
+    let r = Math.round(s);
+    const i = timeUnits.findIndex(([, v]) => r >= v);
+    return timeUnits.slice(i, i + 3).map(([n, v]) => { const q = Math.floor(r / v); r %= v; return q ? `${fmtNum(q)} ${n}${q > 1 ? 's' : ''}` : ''; }).filter(Boolean).join(', ');
+};
 
-            <div class="input-group">
-                <label for="distanceUnit">Distance Unit:</label>
-                <select id="distanceUnit">
-                    <option value="1">Miles</option>
-                    <option value="1.609344">Kilometers</option>
-                </select>
-            </div>
-        </div>
+let mib = 0;
+fill($('dataUnit'), dataUnits, u => u.desc ? `${u.name} – ${u.desc}` : u.name);
+fill($('transport'), transports, t => t.name);
 
-        <div class="results" id="results" style="display: none;">
-            <div class="summary" id="summary"></div>
-            <div class="result-item">
-                <span class="result-label">Data Amount:</span>
-                <span class="result-value" id="dataAmountDisplay"></span>
-            </div>
-            <div class="result-item">
-                <span class="result-label">Max Transfer Rate:</span>
-                <span class="result-value" id="maxTransferRate"></span>
-            </div>
-            <div class="result-item">
-                <span class="result-label">Distance Latency (RTT):</span>
-                <span class="result-value" id="latencyDisplay"></span>
-            </div>
-            <div class="result-item">
-                <span class="result-label">Effective Transfer Rate:</span>
-                <span class="result-value" id="effectiveTransferRate"></span>
-            </div>
-            <div class="result-item">
-                <span class="result-label">Transfer Time:</span>
-                <span class="result-value" id="transferTime"></span>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Configuration data - easily editable JSON structures (using mebibytes as reference)
-        const dataUnits = [
-            { name: "nibbles", mebibytes: 0.00000047683716, default: false },
-            { name: "bytes", mebibytes: 0.00000095367432, default: false },
-            { name: "blocks", mebibytes: 0.00048828125, default: false },
-            { name: "KiB", mebibytes: 0.0009765625, default: false },
-            { name: "KB", mebibytes: 0.00095367432, default: false },
-            { name: "MiB", mebibytes: 1, default: false },
-            { name: "MB", mebibytes: 0.95367432, default: false },
-            { name: "GiB", mebibytes: 1024, default: false },
-            { name: "GB", mebibytes: 953.67432, default: false },
-            { name: "TiB", mebibytes: 1048576, default: false },
-            { name: "TB", mebibytes: 953674.31640625, default: true },
-            { name: "PiB", mebibytes: 1073741824, default: false },
-            { name: "PB", mebibytes: 953674316.40625, default: false },
-            { name: "Floppy 1.44MB", mebibytes: 1.37329, default: false },
-            { name: "CD (650MB)", mebibytes: 619.88769531, default: false },
-            { name: "DVD Single (4.7GB)", mebibytes: 4482.26928711, default: false },
-            { name: "DVD Dual (8.5GB)", mebibytes: 8106.23168945, default: false },
-            { name: "Blu-ray Single (25GB)", mebibytes: 23841.857910, default: false },
-            { name: "Blu-ray Dual (50GB)", mebibytes: 47683.715820, default: false },
-            { name: "Punch Card", mebibytes: 0.00007629395, default: false },
-            { name: "Apollo Flight Computer", mebibytes: 0.0724792480469, default: false }
-        ];
-
-        const transportMethods = [
-            { name: "10baseT Ethernet", mebibytesPerSecond: 1.192093, latencyPerMile: 0.000016, default: false },
-            { name: "100baseT Ethernet", mebibytesPerSecond: 11.920929, latencyPerMile: 0.000016, default: false },
-            { name: "1000baseT Ethernet", mebibytesPerSecond: 119.209290, latencyPerMile: 0.000016, default: false },
-            { name: "1000baseLX Ethernet", mebibytesPerSecond: 119.209290, latencyPerMile: 0.000005, default: false },
-            { name: "2Gbit Fiber Single Mode", mebibytesPerSecond: 238.418579, latencyPerMile: 0.000005, default: false },
-            { name: "4Gbit Fiber Single Mode", mebibytesPerSecond: 476.837158, latencyPerMile: 0.000005, default: false },
-            { name: "4Gbit Fiber Multimode", mebibytesPerSecond: 476.837158, latencyPerMile: 0.000008, default: false },
-            { name: "10GbE Ethernet", mebibytesPerSecond: 1192.092896, latencyPerMile: 0.000005, default: true },
-            { name: "25GbE Ethernet", mebibytesPerSecond: 2980.232239, latencyPerMile: 0.000005, default: false },
-            { name: "40GbE Ethernet", mebibytesPerSecond: 4768.371582, latencyPerMile: 0.000005, default: false },
-            { name: "100GbE Ethernet", mebibytesPerSecond: 11920.928955, latencyPerMile: 0.000005, default: false },
-            { name: "200GbE Ethernet", mebibytesPerSecond: 23841.857910, latencyPerMile: 0.000005, default: false },
-            { name: "400GbE Ethernet", mebibytesPerSecond: 47683.715820, latencyPerMile: 0.000005, default: false },
-            { name: "8Gbit Fibre Channel", mebibytesPerSecond: 810.55, latencyPerMile: 0.000005, default: false },
-            { name: "16Gbit Fibre Channel", mebibytesPerSecond: 1525.88, latencyPerMile: 0.000005, default: false },
-            { name: "32Gbit Fibre Channel", mebibytesPerSecond: 6103.52, latencyPerMile: 0.000005, default: false },
-            { name: "64Gbit Fibre Channel", mebibytesPerSecond: 12207.03, latencyPerMile: 0.000005, default: false },
-            { name: "IBM 9-Track Tape", mebibytesPerSecond: 0.01490116, latencyPerMile: 0, default: false },
-            { name: "IBM 1440 Punch Card Reader", mebibytesPerSecond: 0.00298023, latencyPerMile: 0, default: false },
-            { name: "Marconi Telegraph", mebibytesPerSecond: 0.000001986821, latencyPerMile: 0.000005, default: false },
-            { name: "Pony Express (10 mph avg)", mebibytesPerSecond: 0.00000000000055, latencyPerMile: 360, default: false }
-        ];
-
-        // Initialize dropdowns from JSON data
-        function initializeDropdowns() {
-            const dataUnitSelect = document.getElementById('dataUnit');
-            const transportSelect = document.getElementById('transport');
-
-            // Populate data units
-            dataUnits.forEach(unit => {
-                const option = document.createElement('option');
-                option.value = unit.mebibytes;
-                option.textContent = unit.name;
-                option.selected = unit.default;
-                dataUnitSelect.appendChild(option);
-            });
-
-            // Populate transport methods
-            transportMethods.forEach(transport => {
-                const option = document.createElement('option');
-                option.value = JSON.stringify({
-                    speed: transport.mebibytesPerSecond,
-                    latency: transport.latencyPerMile
-                });
-                option.textContent = transport.name;
-                option.selected = transport.default;
-                transportSelect.appendChild(option);
-            });
+function calculate() {
+    const amt = parseFloat($('dataAmount').value), u = dataUnits[$('dataUnit').selectedIndex], t = transports[$('transport').selectedIndex];
+    const dist = parseFloat($('distance').value) || 0, rtt = 2 * dist * $('distanceUnit').value * t.latencyPerMile;
+    if (!(amt > 0)) return;
+    mib = amt * u.mebibytes;
+    let rate = t.mebibytesPerSecond, overhead = rtt / 2;
+    if (rtt) {
+        if (t.windowMiB) rate = Math.min(rate, net.streams * t.windowMiB / rtt);
+        if (t.lossy) {
+            // Mathis: loss-limited TCP throughput falls with RTT; slow start costs a few RTTs
+            rate = Math.min(rate, net.streams * net.mssBytes * 1.22 / (rtt * Math.sqrt(net.lossRate)) / MiB);
+            overhead += rtt * (1 + Math.ceil(Math.log2(Math.max(1, rate * MiB * rtt / (10 * net.mssBytes)))));
         }
+    }
+    const time = mib / rate + overhead;
+    const distText = dist ? ` over ${fmtNum(dist)} ${$('distanceUnit').selectedOptions[0].text.toLowerCase()}` : '';
+    $('summary').textContent = `For ${fmtNum(amt)} ${u.name}${distText}, it will take ${fmtTime(time)} using ${t.name}.`;
+    $('amountOut').textContent = `${fmtNum(amt)} ${u.name}`;
+    $('maxRateOut').textContent = fmtRate(t.mebibytesPerSecond);
+    $('rttOut').textContent = fmtTime(rtt);
+    $('overheadOut').textContent = fmtTime(overhead);
+    $('rateOut').textContent = `${fmtRate(rate)} (${fmtNum(rate / t.mebibytesPerSecond * 100, 1)}% of max)`;
+    $('timeOut').textContent = fmtTime(time);
+}
 
-        let currentDataInMebibytes = 100 * 953674.31640625; // Track data in mebibytes (100 TB default)
-
-        function calculate() {
-            const dataAmount = parseFloat(document.getElementById('dataAmount').value);
-            const dataUnit = parseFloat(document.getElementById('dataUnit').value);
-            const distance = parseFloat(document.getElementById('distance').value) || 0;
-            const distanceUnit = parseFloat(document.getElementById('distanceUnit').value);
-            const transportData = JSON.parse(document.getElementById('transport').value);
-            const maxTransportRate = transportData.speed; // MiB/s (theoretical max)
-            const latencyPerMile = transportData.latency; // seconds per mile
-            
-            if (!dataAmount || dataAmount <= 0) {
-                alert('Please enter a valid data amount');
-                return;
-            }
-
-            // Update current data in mebibytes
-            currentDataInMebibytes = dataAmount * dataUnit;
-
-            // Calculate latency based on distance
-            const distanceInMiles = distance * distanceUnit;
-            const oneWayLatency = distanceInMiles * latencyPerMile;
-            const roundTripLatency = oneWayLatency * 2; // RTT for TCP acknowledgments
-            
-            // Calculate effective throughput using bandwidth-delay product
-            let effectiveTransportRate = maxTransportRate;
-            
-            if (roundTripLatency > 0) {
-                // Convert MiB/s to bits/s for BDP calculation
-                const maxBandwidthBps = maxTransportRate * 1048576 * 8;
-                
-                // Use modern TCP window scaling - calculate optimal window size
-                // Optimal window = bandwidth × RTT (the bandwidth-delay product)
-                const optimalWindowBits = maxBandwidthBps * roundTripLatency;
-                
-                // Modern systems can scale TCP windows up to several MB
-                // Use a reasonable maximum of 16MB for high-speed networks
-                const maxTcpWindowBits = 16 * 1048576 * 8; // 16MB window in bits
-                
-                // Effective window is the smaller of optimal and maximum
-                const effectiveWindowBits = Math.min(optimalWindowBits, maxTcpWindowBits);
-                
-                // If RTT is very low, we're not window-limited
-                if (roundTripLatency < 0.001) { // Less than 1ms RTT
-                    effectiveTransportRate = maxTransportRate;
-                } else {
-                    // Calculate window-limited throughput
-                    const windowLimitedBps = effectiveWindowBits / roundTripLatency;
-                    
-                    // Effective throughput is minimum of window-limited and max bandwidth
-                    const effectiveBps = Math.min(windowLimitedBps, maxBandwidthBps);
-                    
-                    // Convert back to MiB/s
-                    effectiveTransportRate = effectiveBps / (1048576 * 8);
-                }
-            }
-            
-            // Calculate transfer time using effective rate
-            const dataTransferTimeSeconds = currentDataInMebibytes / effectiveTransportRate;
-            
-            // Total time = data transfer time (already includes BDP effects)
-            const totalTransferTimeSeconds = dataTransferTimeSeconds;
-            
-            // Get the selected option text for display
-            const dataUnitSelect = document.getElementById('dataUnit');
-            const transportSelect = document.getElementById('transport');
-            const distanceUnitSelect = document.getElementById('distanceUnit');
-            const dataUnitText = dataUnitSelect.options[dataUnitSelect.selectedIndex].text;
-            const transportText = transportSelect.options[transportSelect.selectedIndex].text;
-            const distanceUnitText = distanceUnitSelect.options[distanceUnitSelect.selectedIndex].text;
-            
-            // Create summary text
-            let summaryText = `For ${dataAmount.toLocaleString()} ${dataUnitText}`;
-            if (distance > 0) {
-                summaryText += ` over ${distance.toLocaleString()} ${distanceUnitText.toLowerCase()}`;
-            }
-            summaryText += `, it will take ${formatTime(totalTransferTimeSeconds)} using ${transportText}.`;
-            
-            // Update results
-            document.getElementById('summary').textContent = summaryText;
-            document.getElementById('dataAmountDisplay').textContent = `${dataAmount.toLocaleString()} ${dataUnitText}`;
-            document.getElementById('maxTransferRate').textContent = formatMiBRate(maxTransportRate);
-            document.getElementById('latencyDisplay').textContent = formatTime(roundTripLatency);
-            document.getElementById('effectiveTransferRate').textContent = formatMiBRate(effectiveTransportRate);
-            document.getElementById('transferTime').textContent = formatTime(totalTransferTimeSeconds);
-            
-            // Show results
-            document.getElementById('results').style.display = 'block';
-        }
-
-        function onDataUnitChange() {
-            const newDataUnit = parseFloat(document.getElementById('dataUnit').value);
-            const newDataAmount = currentDataInMebibytes / newDataUnit;
-            
-            // Round to reasonable precision
-            let roundedAmount;
-            if (newDataAmount >= 1000) {
-                roundedAmount = Math.round(newDataAmount);
-            } else if (newDataAmount >= 100) {
-                roundedAmount = Math.round(newDataAmount * 10) / 10;
-            } else if (newDataAmount >= 10) {
-                roundedAmount = Math.round(newDataAmount * 100) / 100;
-            } else {
-                roundedAmount = Math.round(newDataAmount * 1000) / 1000;
-            }
-            
-            document.getElementById('dataAmount').value = roundedAmount;
-            calculate();
-        }
-
-        function formatNumber(num) {
-            if (num >= 1e15) return (num / 1e15).toFixed(2) + ' P';
-            if (num >= 1e12) return (num / 1e12).toFixed(2) + ' T';
-            if (num >= 1e9) return (num / 1e9).toFixed(2) + ' G';
-            if (num >= 1e6) return (num / 1e6).toFixed(2) + ' M';
-            if (num >= 1e3) return (num / 1e3).toFixed(2) + ' K';
-            return num.toLocaleString();
-        }
-
-        function formatMiBRate(mibps) {
-            if (mibps >= 1024) return (mibps / 1024).toFixed(2) + ' GiB/s';
-            if (mibps >= 1) return mibps.toFixed(2) + ' MiB/s';
-            if (mibps >= 0.0009765625) return (mibps * 1024).toFixed(2) + ' KiB/s';
-            return (mibps * 1048576).toFixed(2) + ' B/s';
-        }
-
-        function formatTime(seconds) {
-            if (seconds < 0.001) {
-                return Math.round(seconds * 1000000) + ' microseconds';
-            } else if (seconds < 1) {
-                return Math.round(seconds * 1000) + ' milliseconds';
-            } else if (seconds < 60) {
-                const wholeSeconds = Math.floor(seconds);
-                const milliseconds = Math.round((seconds - wholeSeconds) * 1000);
-                if (milliseconds > 0) {
-                    return `${wholeSeconds} seconds, ${milliseconds} milliseconds`;
-                }
-                return wholeSeconds + ' seconds';
-            } else if (seconds < 3600) {
-                const minutes = Math.floor(seconds / 60);
-                const remainingSeconds = Math.floor(seconds % 60);
-                if (remainingSeconds > 0) {
-                    return `${minutes} minutes, ${remainingSeconds} seconds`;
-                }
-                return minutes + ' minutes';
-            } else if (seconds < 86400) {
-                const hours = Math.floor(seconds / 3600);
-                const minutes = Math.floor((seconds % 3600) / 60);
-                const remainingSeconds = Math.floor(seconds % 60);
-                
-                let result = hours + ' hours';
-                if (minutes > 0) result += ', ' + minutes + ' minutes';
-                if (remainingSeconds > 0 && hours < 10) result += ', ' + remainingSeconds + ' seconds';
-                return result;
-            } else if (seconds < 31536000) {
-                const days = Math.floor(seconds / 86400);
-                const hours = Math.floor((seconds % 86400) / 3600);
-                const minutes = Math.floor((seconds % 3600) / 60);
-                
-                let result = days + ' days';
-                if (hours > 0) result += ', ' + hours + ' hours';
-                if (minutes > 0 && days < 10) result += ', ' + minutes + ' minutes';
-                return result;
-            } else {
-                const years = Math.floor(seconds / 31536000);
-                const days = Math.floor((seconds % 31536000) / 86400);
-                const hours = Math.floor((seconds % 86400) / 3600);
-                
-                let result = years + ' years';
-                if (days > 0) result += ', ' + days + ' days';
-                if (hours > 0 && years < 10) result += ', ' + hours + ' hours';
-                return result;
-            }
-        }
-
-        // Calculate on page load with default values
-        window.onload = function() {
-            initializeDropdowns();
-            calculate();
-        };
-
-        // Recalculate when inputs change
-        document.getElementById('dataAmount').addEventListener('input', calculate);
-        document.getElementById('dataUnit').addEventListener('change', onDataUnitChange);
-        document.getElementById('distance').addEventListener('input', calculate);
-        document.getElementById('distanceUnit').addEventListener('change', calculate);
-        document.getElementById('transport').addEventListener('change', calculate);
-    </script>
+$('dataUnit').addEventListener('change', () => { $('dataAmount').value = +(mib / dataUnits[$('dataUnit').selectedIndex].mebibytes).toPrecision(6); calculate(); });
+['dataAmount', 'distance'].forEach(id => $(id).addEventListener('input', calculate));
+['transport', 'distanceUnit'].forEach(id => $(id).addEventListener('change', calculate));
+calculate();
+</script>
 </body>
 </html>
