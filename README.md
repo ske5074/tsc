@@ -14,7 +14,7 @@ Single static `index.html` with no server and no dependencies. Open it in a brow
 - Human-readable results, e.g. "3 days, 4 hours, 12 minutes"
 
 ## Configuration
-All data is in the `<script>` block of `index.html`. Values use mebibytes (MiB, 2^20 bytes) as the reference and are written as formulas.
+All data is in the `<script>` block of `index.html`. Values use mebibytes (MiB, 2²⁰ bytes) as the reference and are written as formulas.
 
 Add a data unit:
 ```js
